@@ -1,8 +1,3 @@
-const numerogiocatoriinput = document.getElementById("numeroGiocatori");
-const numerogiocatoributton = document.getElementById("confermanumero");
-const divmain = document.getElementById("main");
-const divgiocatori = document.getElementById("giocatori");
+const tabellone = document.getElementById('tabellone');
 
-numerogiocatoributton.addEventListener("click", ()=>{
-console.log("ciao");
-});
+//ogni 11 per 4
