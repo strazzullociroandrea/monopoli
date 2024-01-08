@@ -1,3 +1,16 @@
-const tabellone = document.getElementById('tabellone');
+/*document.addEventListener("DOMContentLoaded", function () {
+    var sidebarRight = document.getElementById("sidebar-right");
 
-//ogni 11 per 4
+    for (var i = 1; i <= 10; i++) {
+      var div = document.createElement("div");
+      div.className = "right-item";
+      div.textContent = "Item " + i;
+      sidebarRight.appendChild(div);
+    }
+  });*/
+
+  const header = document.getElementById("header");
+  const main = document.getElementById("main");
+  const sidebarLeft = document.getElementById("sidebar-left");
+  const sidebarRight = document.getElementById("sidebar-right");
+
