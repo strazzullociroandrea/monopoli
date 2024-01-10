@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="src/index.css" />
 </head>
 <body>
-    <table id="board" >
+    <table id="board" class="m-4">
 		<tr>
 			<td class="cell board-corner" id="cell20"><p>Sosta</p><div id="intDiv20" class="row m-1"></div></td>
 			<td class="cell board-top" id="cell21"><div id="intDiv21" class="row m-1"></div></td>
@@ -73,6 +73,16 @@
 			<td class="cell board-corner" id="cell0"><p class="mt-1">VIA</p><div id="intDiv0" class="row m-1"></div></td>
 		</tr>
 	</table>
-	<script src="./src/index.js"></script>
+	<div class="m-3 bg-secondary">
+		<p>Dettagli giocatore:</p>
+		<div id="paginaDettaglioGiocatore">
+			<P>Nome: Ciro</P>
+		</div>
+		<p>Dettagli Casella:</p>
+		<div id="paginaDettaglioCasella" class="mt-4">
+			
+		</div>
+	</div>
+	<script src="./src/index.js" type="module"></script>
 </body>
 </html>
