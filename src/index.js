@@ -1,16 +1,11 @@
-/*document.addEventListener("DOMContentLoaded", function () {
-    var sidebarRight = document.getElementById("sidebar-right");
-
-    for (var i = 1; i <= 10; i++) {
-      var div = document.createElement("div");
-      div.className = "right-item";
-      div.textContent = "Item " + i;
-      sidebarRight.appendChild(div);
+window.onload = () =>{
+    for(let i=0;i<40;i++){
+            const div = document.getElementById("cell"+i);
+            div.addEventListener("click", () =>{
+            console.log("click: "+div.id);
+        })
     }
-  });*/
+    document.getElementById("intDiv0").innerHTML = "<div class='giocatore col-auto'>g1</div><div class='giocatore col-auto'>g2</div><div class='giocatore col-auto'>g3</div><div class='giocatore col-auto'>g4</div>";
+};
 
-  const header = document.getElementById("header");
-  const main = document.getElementById("main");
-  const sidebarLeft = document.getElementById("sidebar-left");
-  const sidebarRight = document.getElementById("sidebar-right");
 
