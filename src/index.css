@@ -1,72 +1,49 @@
-#container {
-    display: grid;
-    grid-template-areas:
-      "header header"
-      "sidebar-left main"
-      "sidebar-right main"
-      "footer footer";
-    grid-template-rows: auto 1fr auto; /* Altezza delle righe */
-    grid-template-columns: 1fr auto; /* Larghezza delle colonne */
-    height: 100vh; /* Altezza del container al 100% della viewport height */
-    width: 100vw;
-  }
-  
-  #header {
-    grid-area: header;
-    grid-template-columns: repeat(10, 1fr); /* 10 colonne con larghezza uguale */
-    grid-template-rows: repeat(10, 1fr); /* 10 righe con altezza uguale */
-    height: 10vw;
-  }
-  
-  #main {
-    grid-area: main;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr); /* 10 colonne con larghezza uguale */
-    grid-template-rows: repeat(10, 1fr); /* 10 righe con altezza uguale */
-    width: 10vw;
-  }
-  
-  #sidebar-left {
-    grid-area: sidebar-left;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr); /* 10 colonne con larghezza uguale */
-    grid-template-rows: repeat(10, 1fr); /* 10 righe con altezza uguale */
-    width: 10vw;
-  }
-  
-  #sidebar-right {
-    grid-area: sidebar-right;
-    grid-template-columns: repeat(10, 1fr); /* 10 colonne con larghezza uguale */
-    grid-template-rows: repeat(10, 1fr); /* 10 righe con altezza uguale */
-    height: 10vw;
-    
-  }
-  
-  /* Resto del tuo CSS rimane invariato */
-  
-  .casella {
-    border: 1px solid #000;
-    padding: 10px;
-    text-align: center;
-    margin: 5px;
-    height: 100%; /* Occupa l'altezza del genitore */
-  }
-  
-  .casellaCol {
-    border: 1px solid #000;
-    padding: 10px;
-    text-align: center;
-    margin: 5px;
-    width: 100%; /* Occupa la larghezza del genitore */
-  }
-  
-  .casellaBorder {
-    border: 1px solid #000;
-    padding: 10px;
-    text-align: center;
-    margin: 5px;
-    width: 100%;
-    height: 100%;
-  }
-  
-  
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#board {
+  border-collapse: collapse;
+  border: 2px solid #000;
+}
+
+.cell {
+  width: 6vw;
+  height: 8vh;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #000;
+  font-size: 12px;
+  background-color: #fff;
+}
+
+.board-center {
+  background-color: #c0c0c0;
+}
+
+.board-corner {
+  background-color: #dd2828;
+  color: #fff;
+}
+
+.board-top,
+.board-bottom {
+  background-color: #f0f0f0;
+}
+
+.board-left,
+.board-right {
+  background-color: #f0f0f0;
+}
+
+#jail {
+  width: 100%;
+  height: 100%;
+  background-color: #696969;
+}
