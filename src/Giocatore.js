@@ -29,4 +29,7 @@ export function Giocatore(nome, posizione = 0) {
     this.getDenaro = function(){
         return this.denaro;
     }
+    this.compraProprieta = function(cifra){
+        this.denaro -= cifra;
+    }
   }
