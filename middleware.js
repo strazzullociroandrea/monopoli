@@ -80,6 +80,26 @@ const middleware = (app, partite, io) =>{
             return res.json({ result: partite[indexPartita].partecipanti });
         }
     })
+
+    app.post("/chiudipartita", (req, res)=>{
+        const {codicePartita} = req.body;
+        if(!codicePartita || codicePartita == ""){
+            return res.json({ result: [] });
+        }
+        const indexPartita = partite.findIndex(partita => {
+            return partita.id === codicePartita
+        });
+        if (indexPartita === -1) {
+            return res.json({ result: false });
+        }else{
+            const partita = partite[indexPartita];
+            io.to(partita.socketServer).emit("partitaFinita");
+            partita.socketPartecipanti.forEach(partecipante=>{
+                io.to(partecipante).emit("partitaFinita");
+            })
+            return res.json({ result: true });
+        }
+    })
 }
 
 module.exports = middleware;
