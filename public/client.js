@@ -15,6 +15,8 @@ const aggiungiti = async() =>{
     rsp = await rsp.json();
    
     if(rsp.result){
+        sessionStorage.setItem("nome",  document.getElementById("nomeGiocatore").value);
+        sessionStorage.setItem("codice", document.getElementById("codicepartita").value);
         location.href = "./tabelloneClient.html";
     }
 }

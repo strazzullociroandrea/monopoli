@@ -9,9 +9,31 @@ const socket = (socket, partite, io) =>{
             io.to(socket.id).emit("aggiuntoserver", false);
         }
     });
-    socket.on('disconnect', () => {
+
+    socket.on("sincronizzaClient", (obj)=>{
+        const {nomePartecipante, codicePartita} = obj;
+        const partitaIndex = partite.findIndex(par => par.id == codicePartita);
+        const partita = partite[partitaIndex];
+        const partecipanti = partita?.partecipanti;
+        if(partecipanti){
+            let trovato = false;
+            partecipanti.forEach(partecipante =>{
+                if(partecipante.nome == nomePartecipante){
+                    partecipante.socket = socket.id;
+                    io.to(socket.id).emit("aggiuntoclient", true);
+                    trovato = true;
+                }
+            })
+            if(!trovato){
+                io.to(socket.id).emit("aggiuntoclient", false);
+            }
+        }else{
+            io.to(socket.id).emit("aggiuntoclient", false);
+        }
+    })
+    /*socket.on('disconnect', () => {
         console.log('user disconnected');
-      //  io.emit("chat", user + " ha abbandonato la chat"); //mando ai client il messaggio dell'utente
-    });
+       io.emit("chat", user + " ha abbandonato la chat"); //mando ai client il messaggio dell'utente
+    });*/
 }
 module.exports = socket;

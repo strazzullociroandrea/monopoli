@@ -22,7 +22,7 @@ const getPartecipanti = async() =>{
             <div style="width: 20px; height: 20px; background-color: %COLOR; margin-right: 10px;"></div>
             <span>%NOME</span>
         </div>
-    `.replace("%NOME", partecipante.nome)
+    `.replace("%NOME", partecipante.nome.substring(0,15))
      .replace("%COLOR", partecipante.pedina)
     })
 }
@@ -56,6 +56,5 @@ const chiudiPartita = async() =>{
         codicePartita: sessionStorage.getItem("codice")
     })
    });
-   console.log("OK");
 }
 chiudi.onclick = () => chiudiPartita();

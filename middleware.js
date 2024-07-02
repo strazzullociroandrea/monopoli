@@ -51,7 +51,8 @@ const middleware = (app, partite, io) =>{
             denaro: "",
             stato: "VIA",
             proprieta: [],
-            carteSpeciali: []
+            carteSpeciali: [],
+            socket: "",
         });
         if(partita?.socketServer){
             io.to(partita.socketServer).emit("aggiuntopartecipante", JSON.stringify({
@@ -94,10 +95,10 @@ const middleware = (app, partite, io) =>{
             io.to(partita.socketServer).emit("partitaFinita", false);
         }else{
             const partita = partite[indexPartita];
-            io.to(partita.socketServer).emit("partitaFinita", true);
-            partita?.socketPartecipanti.forEach(partecipante=>{
-                io.to(partecipante).emit("partitaFinita", true);
+            partita.partecipanti.forEach(partecipante=>{
+                io.to(partecipante.socket).emit("partitaFinita", true);
             })
+            io.to(partita.socketServer).emit("partitaFinita", true);
         }
     })
 }
