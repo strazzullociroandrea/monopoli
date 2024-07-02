@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        button {
+            height: 40px;
+            margin-bottom: 50px;
+        }
+
+        .title {
+            margin-bottom: 50px;
+        }
+    </style>
+    <title>Monopoli - server</title>
+</head>
+
+<body class="bg bg-success">
+    <div class="container-fluid ">
+        <div class="row justify-content-center">
+            <div class="col-md-auto mt-4 title">
+                <h1 class="text-light">MONOPOLI</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <input class="form-control" id="nomepartita" placeholder="Inserisci il nome della partita"
+                        type="text" />
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5 mb-5">
+                <div class="col-md-5">
+                    <input class="form-control" id="codice" value="Riscatta il codice"
+                    type="button" />
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-5">
+                    <input class="form-control btn btn-danger" id="codice" value="Annulla"
+                    type="button" onclick="location.href='./index.html'" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <span id="codiceModal"></span>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-auto">
+                    <button type="button" class="form-control d-none" id="avvia">Avvia</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="server.js" type="module"></script>
+</body>
+</html>
