@@ -89,15 +89,15 @@ const middleware = (app, partite, io) =>{
         const indexPartita = partite.findIndex(partita => {
             return partita.id === codicePartita
         });
+        const partita = partite[indexPartita];
         if (indexPartita === -1) {
-            return res.json({ result: false });
+            io.to(partita.socketServer).emit("partitaFinita", false);
         }else{
             const partita = partite[indexPartita];
-            io.to(partita.socketServer).emit("partitaFinita");
-            partita.socketPartecipanti.forEach(partecipante=>{
-                io.to(partecipante).emit("partitaFinita");
+            io.to(partita.socketServer).emit("partitaFinita", true);
+            partita?.socketPartecipanti.forEach(partecipante=>{
+                io.to(partecipante).emit("partitaFinita", true);
             })
-            return res.json({ result: true });
         }
     })
 }

@@ -1,6 +1,7 @@
 const titolo = document.getElementById("titolo");
 const codice = document.getElementById("codice");
 const partecipanti = document.getElementById("partecipanti");
+const chiudi = document.getElementById("chiudi");
 const socket = io();
 
 const getPartecipanti = async() =>{
@@ -39,3 +40,22 @@ socket.on("aggiuntoserver",(response)=>{
 socket.on("aggiuntopartecipante", (partecipanteNuovo)=>{
     window.onload();
 })
+
+socket.on("partitaFinita", (partecipanteNuovo)=>{
+   sessionStorage.clear();
+   location.href = "./index.html";
+})
+
+const chiudiPartita = async() =>{
+   await fetch("/chiudipartita",{
+    method: "POST",
+    headers: {
+        "content-type": "Application/json"
+    },
+    body: JSON.stringify({
+        codicePartita: sessionStorage.getItem("codice")
+    })
+   });
+   console.log("OK");
+}
+chiudi.onclick = () => chiudiPartita();
