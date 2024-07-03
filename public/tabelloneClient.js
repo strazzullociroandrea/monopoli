@@ -1,5 +1,6 @@
 const nome = document.getElementById("nome");
 const posizione = document.getElementById("posizione");
+const esciPar = document.getElementById("esciPartita");
 const socket = io();
 
 const getPosizione = async() =>{
@@ -19,8 +20,22 @@ const getPosizione = async() =>{
  }else{
     posizione.innerText = rsp.result;
  }
- //console.log("La tua posizione è : "+rsp.result);
 }
+
+const esciPartita = async() =>{
+   await fetch("/escipartita", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            codicePartita: sessionStorage.getItem("codice"), 
+            nomeGiocatore: sessionStorage.getItem("nome")
+        })
+   })
+}
+
+esciPar.onclick = async() => await esciPartita();
 
 window.onload =  () =>{
     nome.innerText = sessionStorage.getItem("nome");
@@ -39,7 +54,16 @@ socket.on("aggiuntoclient",(response)=>{
     }
 })
 
-socket.on("partitaFinita", (partecipanteNuovo)=>{
+socket.on("partitaFinita", ()=>{
     sessionStorage.clear();
     location.href = "./index.html";
  })
+
+socket.on("uscitaPartita", (result)=>{
+    if(result){
+        sessionStorage.clear();
+        location.href = "./index.html";
+    }else{
+        console.log("Non è stato possibile uscire dalla partita");
+    }
+})

@@ -37,7 +37,7 @@ socket.on("aggiuntoserver",(response)=>{
     getPartecipanti();
 })
 
-socket.on("aggiuntopartecipante", (partecipanteNuovo)=>{
+socket.on("aggiuntopartecipante", ()=>{
     window.onload();
 })
 

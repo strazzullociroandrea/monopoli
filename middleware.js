@@ -55,14 +55,7 @@ const middleware = (app, partite, io) =>{
             socket: "",
         });
         if(partita?.socketServer){
-            io.to(partita.socketServer).emit("aggiuntopartecipante", JSON.stringify({
-                nome: nomeGiocatore,
-                pedina: colorePedina,
-                denaro: "",
-                stato: "VIA",
-                proprieta: [],
-                carteSpeciali: []
-            }));
+            io.to(partita.socketServer).emit("aggiuntopartecipante");
         }
         return res.json({ result: true });
     });
@@ -102,6 +95,29 @@ const middleware = (app, partite, io) =>{
         }
     })
 
+    app.post("/escipartita", (req, res)=>{
+        const {codicePartita, nomeGiocatore} = req.body;
+        if(!codicePartita || codicePartita == ""){
+            return res.json({ result: [] });
+        }
+        const indexPartita = partite.findIndex(partita => {
+            return res.json({ result:  partita.id === codicePartita });
+        });
+        const partita = partite[indexPartita];
+        if (indexPartita === -1) {
+            //io.to(partita.socketServer).emit("uscitaPartita", false);
+        }else{
+            const partita = partite[indexPartita];
+            const posizioneGiocatore = partita.partecipanti.findIndex(partecipante => partecipante.nome == nomeGiocatore);
+            if(posizioneGiocatore == -1){
+                //io.to(partita.socketServer).emit("uscitaPartita", false);
+            }else{
+                const partecipanteEliminato = partite[indexPartita].partecipanti.splice(posizioneGiocatore, 1);
+                io.to(partecipanteEliminato[0].socket).emit("uscitaPartita", true);
+                io.to(partita.socketServer).emit("aggiuntopartecipante");
+            }
+        }
+    })
     app.post("/recuperaposizione", (req, res)=>{
         const {codicePartita, nomeGiocatore} = req.body;
         if(!codicePartita || codicePartita == ""){
