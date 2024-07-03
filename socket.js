@@ -31,9 +31,13 @@ const socket = (socket, partite, io) =>{
             io.to(socket.id).emit("aggiuntoclient", false);
         }
     })
-    /*socket.on('disconnect', () => {
-        console.log('user disconnected');
-       io.emit("chat", user + " ha abbandonato la chat"); //mando ai client il messaggio dell'utente
-    });*/
+    /*
+        socket.on('disconnect', () => {
+            console.log('user disconnected');
+            //Se si disconnette il server => chiudo la partita
+            //Se si disconnette il client => tolgo il client dalla partita
+        io.emit("chat", user + " ha abbandonato la chat"); //mando ai client il messaggio dell'utente
+        });
+    */
 }
 module.exports = socket;

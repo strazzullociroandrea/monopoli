@@ -2,6 +2,7 @@ const titolo = document.getElementById("titolo");
 const codice = document.getElementById("codice");
 const partecipanti = document.getElementById("partecipanti");
 const chiudi = document.getElementById("chiudi");
+const turno = document.getElementById("turno");
 const socket = io();
 
 const getPartecipanti = async() =>{
@@ -26,10 +27,27 @@ const getPartecipanti = async() =>{
      .replace("%COLOR", partecipante.pedina)
     })
 }
-
-window.onload = () =>{
+const getTurno = async() =>{
+    let rsp = await fetch("/recuperaTurno", {
+        method: "POST",
+        headers:{
+            "content-type": "Application/json"
+        },
+        body: JSON.stringify({
+            codicePartita: sessionStorage.getItem("codice"),
+        })
+    });
+    rsp = await rsp.json();
+    if(rsp.result == ""){
+        turno.innerText = "Non determinato";
+    }else{
+        turno.innerText = rsp.result;
+    }
+}
+window.onload = async() =>{
     titolo.value = sessionStorage.getItem("titolo");
     codice.value = sessionStorage.getItem("codice");
+    await getTurno();
     socket.emit("aggiungiserver", sessionStorage.getItem("codice"));
 }
 

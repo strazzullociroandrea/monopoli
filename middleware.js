@@ -17,7 +17,8 @@ const middleware = (app, partite, io) =>{
             partite.push({
                 id: id,
                 nome: nome,
-                partecipanti: []
+                partecipanti: [],
+                turno: ""
             });
             res.json({ result: true, id: id });
         } else {
@@ -54,6 +55,9 @@ const middleware = (app, partite, io) =>{
             carteSpeciali: [],
             socket: "",
         });
+        if(partita.turno == ""){
+            partite[indexPartita].turno = nomeGiocatore;
+        }
         if(partita?.socketServer){
             io.to(partita.socketServer).emit("aggiuntopartecipante");
         }
@@ -72,6 +76,22 @@ const middleware = (app, partite, io) =>{
             return res.json({ result: [] });
         }else{
             return res.json({ result: partite[indexPartita].partecipanti });
+        }
+    })
+
+    app.post("/recuperaTurno", (req, res)=>{
+        const {codicePartita} = req.body;
+        if(!codicePartita || codicePartita == ""){
+            return res.json({ result: "" });
+        }
+        const indexPartita = partite.findIndex(partita => {
+            return partita.id === codicePartita
+        });
+        if (indexPartita === -1) {
+            return res.json({ result: "" });
+        }else{
+            const partita = partite[indexPartita];
+            return res.json({ result: partita.turno });
         }
     })
 
