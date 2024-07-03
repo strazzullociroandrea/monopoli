@@ -101,6 +101,31 @@ const middleware = (app, partite, io) =>{
             io.to(partita.socketServer).emit("partitaFinita", true);
         }
     })
+
+    app.post("/recuperaposizione", (req, res)=>{
+        const {codicePartita, nomeGiocatore} = req.body;
+        if(!codicePartita || codicePartita == ""){
+            return res.json({ result: "errore" });
+        }
+        const indexPartita = partite.findIndex(partita => {
+            return partita.id === codicePartita
+        });
+        const partita = partite[indexPartita];
+        if(nomeGiocatore == "" || !nomeGiocatore){
+            return res.json({ result: "errore" });
+        }else{
+            let trovato = false;
+            partita.partecipanti.forEach(partecipante =>{
+                if(partecipante.nome == nomeGiocatore){
+                    trovato = true;
+                    return res.json({ result: partecipante.stato });
+                }
+            })
+            if(!trovato){
+                res.json({ result: "errore" });
+            }
+        }
+    })
 }
 
 module.exports = middleware;
