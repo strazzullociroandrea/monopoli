@@ -49,7 +49,7 @@ const middleware = (app, partite, io) =>{
         partita.partecipanti.push({
             nome: nomeGiocatore,
             pedina: colorePedina,
-            denaro: "",
+            denaro: "1500",
             stato: "VIA",
             proprieta: [],
             carteSpeciali: [],
@@ -95,6 +95,30 @@ const middleware = (app, partite, io) =>{
         }
     })
 
+    app.post("/recuperaDenaro", (req, res)=>{
+        const {codicePartita, nomeGiocatore} = req.body;
+        if(!codicePartita || codicePartita == ""){
+            return res.json({ result: "errore" });
+        }
+        const indexPartita = partite.findIndex(partita => {
+            return partita.id === codicePartita
+        });
+        const partita = partite[indexPartita];
+        if(nomeGiocatore == "" || !nomeGiocatore){
+            return res.json({ result: "errore" });
+        }else{
+            let trovato = false;
+            partita.partecipanti.forEach(partecipante =>{
+                if(partecipante.nome == nomeGiocatore){
+                    trovato = true;
+                    return res.json({ result: partecipante.denaro });
+                }
+            })
+            if(!trovato){
+                res.json({ result: "errore" });
+            }
+        }
+    })
     app.post("/chiudipartita", (req, res)=>{
         const {codicePartita} = req.body;
         if(!codicePartita || codicePartita == ""){

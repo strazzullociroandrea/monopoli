@@ -2,6 +2,8 @@ const nome = document.getElementById("nome");
 const posizione = document.getElementById("posizione");
 const esciPar = document.getElementById("esciPartita");
 const turno = document.getElementById("turno");
+const lanciaDadi = document.getElementById("lanciaDadi");
+const denaro = document.getElementById("denaro");
 const socket = io();
 
 const getPosizione = async () => {
@@ -22,6 +24,22 @@ const getPosizione = async () => {
         posizione.innerText = rsp.result;
     }
 }
+const getDenaro = async() =>{
+    let rsp = await fetch("/recuperaDenaro", {
+        method: "POST",
+        headers:{
+            "content-type": "Application/json"
+        },
+        body: JSON.stringify({
+            codicePartita: sessionStorage.getItem("codice"),
+            nomeGiocatore: sessionStorage.getItem("nome")
+        })
+    });
+    rsp = await rsp.json();
+    if(rsp.result){
+        denaro.innerText = rsp.result;
+    }
+}
 //usata anche dal server
 const getTurno = async() =>{
     let rsp = await fetch("/recuperaTurno", {
@@ -38,6 +56,14 @@ const getTurno = async() =>{
         turno.innerText = "Non determinato";
     }else{
         turno.innerText = rsp.result;
+        if(turno.textContent == nome.textContent){
+            lanciaDadi.disabled = false;
+            lanciaDadi.style.backgroundColor = 'orange';
+            lanciaDadi.style.border = 'orange';
+        }else{
+            lanciaDadi.disabled = true;
+            
+        }
     }
 }
 
@@ -64,6 +90,7 @@ window.onload = async() => {
     })
     await getTurno();
     await getPosizione();
+    await getDenaro();
 }
 
 socket.on("aggiuntoclient", (response) => {
