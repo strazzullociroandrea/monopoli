@@ -4,31 +4,38 @@ const esciPar = document.getElementById("esciPartita");
 const turno = document.getElementById("turno");
 const lanciaDadi = document.getElementById("lanciaDadi");
 const denaro = document.getElementById("denaro");
+const modalDadi = new bootstrap.Modal(document.getElementById("lancioDadi"));
+
 const socket = io();
+const dice1 = document.getElementById('dice1');
+const dice2 = document.getElementById('dice2');
+
+const roll = () => Math.floor(Math.random() * 6) + 1;
 
 const getPosizione = async () => {
     let rsp = await fetch("/recuperaposizione", {
         method: "POST",
         headers: {
-            "content-type": "Application/json"
+            "content-type": "application/json"
         },
         body: JSON.stringify({
             codicePartita: sessionStorage.getItem("codice"),
             nomeGiocatore: sessionStorage.getItem("nome")
         })
-    })
+    });
     rsp = await rsp.json();
     if (rsp.result.includes("errore")) {
-
+        console.log("Errore nel recuperare la posizione");
     } else {
         posizione.innerText = rsp.result;
     }
-}
-const getDenaro = async() =>{
+};
+
+const getDenaro = async () => {
     let rsp = await fetch("/recuperaDenaro", {
         method: "POST",
-        headers:{
-            "content-type": "Application/json"
+        headers: {
+            "content-type": "application/json"
         },
         body: JSON.stringify({
             codicePartita: sessionStorage.getItem("codice"),
@@ -36,36 +43,38 @@ const getDenaro = async() =>{
         })
     });
     rsp = await rsp.json();
-    if(rsp.result){
+    if (rsp.result) {
         denaro.innerText = rsp.result;
     }
-}
-//usata anche dal server
-const getTurno = async() =>{
+};
+
+// usata anche dal server
+const getTurno = async () => {
     let rsp = await fetch("/recuperaTurno", {
         method: "POST",
-        headers:{
-            "content-type": "Application/json"
+        headers: {
+            "content-type": "application/json"
         },
         body: JSON.stringify({
-            codicePartita: sessionStorage.getItem("codice"),
+            codicePartita: sessionStorage.getItem("codice")
         })
     });
     rsp = await rsp.json();
-    if(rsp.result == ""){
+    if (rsp.result == "") {
         turno.innerText = "Non determinato";
-    }else{
+    } else {
         turno.innerText = rsp.result;
-        if(turno.textContent == nome.textContent){
+        if (turno.textContent == nome.textContent) {
             lanciaDadi.disabled = false;
             lanciaDadi.style.backgroundColor = 'orange';
             lanciaDadi.style.border = 'orange';
-        }else{
+        } else {
             lanciaDadi.disabled = true;
-            
+            lanciaDadi.style.backgroundColor = '';
+            lanciaDadi.style.border = '';
         }
     }
-}
+};
 
 const esciPartita = async () => {
     await fetch("/escipartita", {
@@ -77,21 +86,21 @@ const esciPartita = async () => {
             codicePartita: sessionStorage.getItem("codice"),
             nomeGiocatore: sessionStorage.getItem("nome")
         })
-    })
-}
+    });
+};
 
 esciPar.onclick = async () => await esciPartita();
 
-window.onload = async() => {
+window.onload = async () => {
     nome.innerText = sessionStorage.getItem("nome");
     socket.emit("sincronizzaClient", {
         nomePartecipante: sessionStorage.getItem("nome"),
         codicePartita: sessionStorage.getItem("codice")
-    })
+    });
     await getTurno();
     await getPosizione();
     await getDenaro();
-}
+};
 
 socket.on("aggiuntoclient", (response) => {
     if (response) {
@@ -99,12 +108,12 @@ socket.on("aggiuntoclient", (response) => {
     } else {
         console.log("client socket non aggiunto");
     }
-})
+});
 
 socket.on("partitaFinita", () => {
     sessionStorage.clear();
     location.href = "./index.html";
-})
+});
 
 socket.on("uscitaPartita", (result) => {
     if (result) {
@@ -113,4 +122,20 @@ socket.on("uscitaPartita", (result) => {
     } else {
         console.log("Non è stato possibile uscire dalla partita");
     }
-})
+});
+
+lanciaDadi.onclick = () => {
+    if (!lanciaDadi.disabled) {
+        modalDadi.show();
+    }
+};
+
+document.getElementById('rollDiceButton').onclick = function() {
+    const dice1 = document.getElementById('dice1');
+    const dice2 = document.getElementById('dice2');
+    
+    const roll = () => Math.floor(Math.random() * 6) + 1;
+    
+    dice1.textContent = roll();
+    dice2.textContent = roll();
+};
