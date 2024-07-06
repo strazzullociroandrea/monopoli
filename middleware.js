@@ -49,8 +49,8 @@ const middleware = (app, partite, io) =>{
         partita.partecipanti.push({
             nome: nomeGiocatore,
             pedina: colorePedina,
-            denaro: "1500",
-            stato: "VIA",
+            denaro: 1500,
+            stato: 0,
             proprieta: [],
             carteSpeciali: [],
             socket: "",
@@ -112,6 +112,37 @@ const middleware = (app, partite, io) =>{
                 if(partecipante.nome == nomeGiocatore){
                     trovato = true;
                     return res.json({ result: partecipante.denaro });
+                }
+            })
+            if(!trovato){
+                res.json({ result: "errore" });
+            }
+        }
+    })
+    app.post("/lancioDadi", (req, res)=>{
+        const {codicePartita, nomeGiocatore, dado1, dado2} = req.body;
+        if(!codicePartita || codicePartita == ""){
+            return res.json({ result: "errore" });
+        }
+        const indexPartita = partite.findIndex(partita => {
+            return partita.id === codicePartita
+        });
+        const partita = partite[indexPartita];
+        if(nomeGiocatore == "" || !nomeGiocatore){
+            return res.json({ result: "errore" });
+        }else{
+            let trovato = false;
+            partita.partecipanti.forEach(partecipante =>{
+                if(partecipante.nome == nomeGiocatore){
+                    trovato = true;
+                    if(parseInt(dado1) > 0 && parseInt(dado1) <= 6 && parseInt(dado2) > 0 && parseInt(dado2) <= 6){
+                        partecipante.stato += parseInt(dado1)+ parseInt(dado2);
+                        if(partecipante.stato > 40){
+                            partecipante.stato = 40 - partecipante.stato;
+                            partecipante.denaro += 200;
+                        }
+                    }
+                    res.json({ result: "Ok aggiorna denaro !" });
                 }
             })
             if(!trovato){

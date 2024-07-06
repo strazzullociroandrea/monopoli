@@ -130,12 +130,30 @@ lanciaDadi.onclick = () => {
     }
 };
 
-document.getElementById('rollDiceButton').onclick = function() {
+document.getElementById('rollDiceButton').onclick = async function() {
     const dice1 = document.getElementById('dice1');
     const dice2 = document.getElementById('dice2');
+
+    const roll = async() => Math.floor(Math.random() * 6) + 1;
+
+    const dado1 = await roll();
+    const dado2 = await roll();
+    dice1.textContent = dado1;
+    dice2.textContent = dado2;
     
-    const roll = () => Math.floor(Math.random() * 6) + 1;
-    
-    dice1.textContent = roll();
-    dice2.textContent = roll();
+    let rsp = await fetch("/lancioDadi",{
+        method: "POST",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            nomePartecipante: sessionStorage.getItem("nome"),
+            codicePartita: sessionStorage.getItem("codice"),
+            dado1,
+            dado2
+        })
+    })
+    /*
+        gestire middleware per il cambio turno dopo che ha modificato importo denaro e posizione + spostamento
+    */
 };
