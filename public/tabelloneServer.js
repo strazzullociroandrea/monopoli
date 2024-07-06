@@ -76,3 +76,8 @@ const chiudiPartita = async() =>{
    });
 }
 chiudi.onclick = () => chiudiPartita();
+
+socket.on("cambioturno", () =>{
+    console.log("Cambio turno ricevuto");
+    window.location.reload()
+})

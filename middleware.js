@@ -151,35 +151,40 @@ const middleware = (app, partite, io) => {
     })
     app.post("/lancioDadi", (req, res) => {
         const { codicePartita, nomeGiocatore, dado1, dado2 } = req.body;
-        if (!codicePartita || codicePartita == "") {
+        if (!codicePartita || codicePartita === "") {
             return res.json({ result: "errore" });
         }
-        const indexPartita = partite.findIndex(partita => {
-            return partita.id === codicePartita
-        });
-        const partita = partite[indexPartita];
-        if (nomeGiocatore == "" || !nomeGiocatore) {
+        const indexPartita = partite.findIndex(partita => partita.id === codicePartita);
+        if (indexPartita === -1) {
             return res.json({ result: "errore" });
-        } else {
-            let trovato = false;
-            partita.partecipanti.forEach(partecipante => {
-                if (partecipante.nome == nomeGiocatore) {
-                    trovato = true;
-                    if (parseInt(dado1) > 0 && parseInt(dado1) <= 6 && parseInt(dado2) > 0 && parseInt(dado2) <= 6) {
-                        partecipante.stato += parseInt(dado1) + parseInt(dado2);
-                        if (partecipante.stato > 40) {
-                            partecipante.stato = 40 - partecipante.stato;
-                            partecipante.denaro += 200;
-                        }
+        }
+        const partita = partite[indexPartita];
+        if (!nomeGiocatore || nomeGiocatore === "") {
+            return res.json({ result: "errore" });
+        }
+        let trovato = false;
+        for (let partecipante of partita.partecipanti) {
+            if (partecipante.nome === nomeGiocatore) {
+                trovato = true;
+                if (parseInt(dado1) > 0 && parseInt(dado1) <= 6 && parseInt(dado2) > 0 && parseInt(dado2) <= 6) {
+                    partecipante.stato += parseInt(dado1) + parseInt(dado2);
+                    if (partecipante.stato >= 40) {
+                        partecipante.stato = partecipante.stato - 40;
+                        partecipante.denaro += 200;
                     }
                     res.json({ result: "Ok aggiorna denaro !" });
+                    return;
+                } else {
+                    res.json({ result: "errore" });
+                    return;
                 }
-            })
-            if (!trovato) {
-                res.json({ result: "errore" });
             }
         }
-    })
+        if (!trovato) {
+            res.json({ result: "errore" });
+        }
+    });
+    
     app.post("/chiudipartita", (req, res) => {
         const { codicePartita } = req.body;
         if (!codicePartita || codicePartita == "") {
