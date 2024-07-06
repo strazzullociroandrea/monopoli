@@ -8,7 +8,7 @@ async function generaId(partite) {
     return id;
 }
 
-const middleware = (app, partite, io) =>{
+const middleware = (app, partite, io) => {
 
     app.post("/creapartita", async (req, res) => {
         const nome = req.body.nome;
@@ -55,18 +55,18 @@ const middleware = (app, partite, io) =>{
             carteSpeciali: [],
             socket: "",
         });
-        if(partita.turno == ""){
+        if (partita.turno == "") {
             partite[indexPartita].turno = nomeGiocatore;
         }
-        if(partita?.socketServer){
+        if (partita?.socketServer) {
             io.to(partita.socketServer).emit("aggiuntopartecipante");
         }
         return res.json({ result: true });
     });
 
-    app.post("/partecipanti", (req, res)=>{
-        const {codicePartita} = req.body;
-        if(!codicePartita || codicePartita == ""){
+    app.post("/partecipanti", (req, res) => {
+        const { codicePartita } = req.body;
+        if (!codicePartita || codicePartita == "") {
             return res.json({ result: [] });
         }
         const indexPartita = partite.findIndex(partita => {
@@ -74,14 +74,14 @@ const middleware = (app, partite, io) =>{
         });
         if (indexPartita === -1) {
             return res.json({ result: [] });
-        }else{
+        } else {
             return res.json({ result: partite[indexPartita].partecipanti });
         }
     })
 
-    app.post("/recuperaTurno", (req, res)=>{
-        const {codicePartita} = req.body;
-        if(!codicePartita || codicePartita == ""){
+    app.post("/recuperaTurno", (req, res) => {
+        const { codicePartita } = req.body;
+        if (!codicePartita || codicePartita == "") {
             return res.json({ result: "" });
         }
         const indexPartita = partite.findIndex(partita => {
@@ -89,82 +89,85 @@ const middleware = (app, partite, io) =>{
         });
         if (indexPartita === -1) {
             return res.json({ result: "" });
-        }else{
+        } else {
             const partita = partite[indexPartita];
             return res.json({ result: partita.turno });
         }
     })
     app.post("/cambioTurno", (req, res) => {
         const { codicePartita } = req.body;
-        if (!codicePartita || codicePartita == "") {
+        if (!codicePartita || codicePartita === "") {
             return res.json({ result: "" });
         }
-    
         const indexPartita = partite.findIndex(partita => partita.id === codicePartita);
         if (indexPartita === -1) {
             return res.json({ result: "" });
-        } else {
-            const partita = partite[indexPartita];
-            let partecipanteIndex = partita.partecipanti.findIndex(partecipante => partecipante.nome == partita.turno);
-    
-            if (partecipanteIndex == -1) {
-                console.log("Partecipante non trovato");
-            } else {
-                if (partecipanteIndex == partita.partecipanti.length - 1) {
-                    partecipanteIndex = 0;
-                } else {
-                    partecipanteIndex++;
-                }
-                partita.turno = partita.partecipanti[partecipanteIndex].nome;
-                io.to(partita.socketServer).emit("cambioturno");
-                return res.json({ result: "Ok" });
-            }
         }
+        const partita = partite[indexPartita];
+        let partecipanteIndex = partita.partecipanti.findIndex(partecipante => partecipante.nome == partita.turno);
+        if (partecipanteIndex === -1) {
+            console.log("Partecipante non trovato");
+            return res.json({ result: "Errore: partecipante non trovato" });
+        }
+        if (partecipanteIndex === partita.partecipanti.length - 1) {
+            partecipanteIndex = 0;
+        } else {
+            partecipanteIndex++;
+        }
+        partita.turno = partita.partecipanti[partecipanteIndex].nome;
+        io.to(partita.socketServer).emit("cambioturno", { message: "Cambio turno" });
+        partita.partecipanti.forEach(partecipante => {
+            io.to(partecipante.socket).emit("cambioturno", { message: "Cambio turno" });
+        });
+
+        return res.json({ result: "Ok" });
     });
-    
-    app.post("/recuperaDenaro", (req, res)=>{
-        const {codicePartita, nomeGiocatore} = req.body;
-        if(!codicePartita || codicePartita == ""){
+
+
+
+    app.post("/recuperaDenaro", (req, res) => {
+        const { codicePartita, nomeGiocatore } = req.body;
+        if (!codicePartita || codicePartita == "") {
             return res.json({ result: "errore" });
         }
         const indexPartita = partite.findIndex(partita => {
             return partita.id === codicePartita
         });
         const partita = partite[indexPartita];
-        if(nomeGiocatore == "" || !nomeGiocatore){
+        if (nomeGiocatore == "" || !nomeGiocatore) {
             return res.json({ result: "errore" });
-        }else{
+        } else {
             let trovato = false;
-            partita.partecipanti.forEach(partecipante =>{
-                if(partecipante.nome == nomeGiocatore){
+            partita.partecipanti.forEach(partecipante => {
+                if (partecipante.nome == nomeGiocatore) {
                     trovato = true;
                     return res.json({ result: partecipante.denaro });
                 }
             })
-            if(!trovato){
+            if (!trovato) {
                 res.json({ result: "errore" });
             }
         }
     })
-    app.post("/lancioDadi", (req, res)=>{
-        const {codicePartita, nomeGiocatore, dado1, dado2} = req.body;
-        if(!codicePartita || codicePartita == ""){
+    app.post("/lancioDadi", (req, res) => {
+        const { codicePartita, nomeGiocatore, dado1, dado2 } = req.body;
+        if (!codicePartita || codicePartita == "") {
             return res.json({ result: "errore" });
         }
         const indexPartita = partite.findIndex(partita => {
             return partita.id === codicePartita
         });
         const partita = partite[indexPartita];
-        if(nomeGiocatore == "" || !nomeGiocatore){
+        if (nomeGiocatore == "" || !nomeGiocatore) {
             return res.json({ result: "errore" });
-        }else{
+        } else {
             let trovato = false;
-            partita.partecipanti.forEach(partecipante =>{
-                if(partecipante.nome == nomeGiocatore){
+            partita.partecipanti.forEach(partecipante => {
+                if (partecipante.nome == nomeGiocatore) {
                     trovato = true;
-                    if(parseInt(dado1) > 0 && parseInt(dado1) <= 6 && parseInt(dado2) > 0 && parseInt(dado2) <= 6){
-                        partecipante.stato += parseInt(dado1)+ parseInt(dado2);
-                        if(partecipante.stato > 40){
+                    if (parseInt(dado1) > 0 && parseInt(dado1) <= 6 && parseInt(dado2) > 0 && parseInt(dado2) <= 6) {
+                        partecipante.stato += parseInt(dado1) + parseInt(dado2);
+                        if (partecipante.stato > 40) {
                             partecipante.stato = 40 - partecipante.stato;
                             partecipante.denaro += 200;
                         }
@@ -172,14 +175,14 @@ const middleware = (app, partite, io) =>{
                     res.json({ result: "Ok aggiorna denaro !" });
                 }
             })
-            if(!trovato){
+            if (!trovato) {
                 res.json({ result: "errore" });
             }
         }
     })
-    app.post("/chiudipartita", (req, res)=>{
-        const {codicePartita} = req.body;
-        if(!codicePartita || codicePartita == ""){
+    app.post("/chiudipartita", (req, res) => {
+        const { codicePartita } = req.body;
+        if (!codicePartita || codicePartita == "") {
             return res.json({ result: [] });
         }
         const indexPartita = partite.findIndex(partita => {
@@ -188,58 +191,69 @@ const middleware = (app, partite, io) =>{
         const partita = partite[indexPartita];
         if (indexPartita === -1) {
             io.to(partita.socketServer).emit("partitaFinita", false);
-        }else{
+        } else {
             const partita = partite[indexPartita];
-            partita.partecipanti.forEach(partecipante=>{
+            partita.partecipanti.forEach(partecipante => {
                 io.to(partecipante.socket).emit("partitaFinita", true);
             })
             io.to(partita.socketServer).emit("partitaFinita", true);
         }
     })
 
-    app.post("/escipartita", (req, res)=>{
-        const {codicePartita, nomeGiocatore} = req.body;
-        if(!codicePartita || codicePartita == ""){
+    app.post("/escipartita", (req, res) => {
+        const { codicePartita, nomeGiocatore } = req.body;
+        if (!codicePartita || codicePartita == "") {
             return res.json({ result: [] });
         }
         const indexPartita = partite.findIndex(partita => {
-            return res.json({ result:  partita.id === codicePartita });
+            return res.json({ result: partita.id === codicePartita });
         });
         const partita = partite[indexPartita];
         if (indexPartita === -1) {
             //io.to(partita.socketServer).emit("uscitaPartita", false);
-        }else{
+        } else {
             const partita = partite[indexPartita];
             const posizioneGiocatore = partita.partecipanti.findIndex(partecipante => partecipante.nome == nomeGiocatore);
-            if(posizioneGiocatore == -1){
+            if (posizioneGiocatore == -1) {
                 //io.to(partita.socketServer).emit("uscitaPartita", false);
-            }else{
+            } else {
                 const partecipanteEliminato = partite[indexPartita].partecipanti.splice(posizioneGiocatore, 1);
+                if (posizioneGiocatore === partita.partecipanti.length - 1) {
+                    partecipanteIndex = 0;
+                } else {
+                    partecipanteIndex++;
+                }
+                partita.turno = partita.partecipanti[partecipanteIndex].nome;
+                io.to(partita.socketServer).emit("cambioturno", { message: "Cambio turno" });
+                partita.partecipanti.forEach(partecipante => {
+                    io.to(partecipante.socket).emit("cambioturno", { message: "Cambio turno" });
+                });
+
                 io.to(partecipanteEliminato[0].socket).emit("uscitaPartita", true);
                 io.to(partita.socketServer).emit("aggiuntopartecipante");
             }
         }
     })
-    app.post("/recuperaposizione", (req, res)=>{
-        const {codicePartita, nomeGiocatore} = req.body;
-        if(!codicePartita || codicePartita == ""){
+    app.post("/recuperaposizione", (req, res) => {
+        const { codicePartita, nomeGiocatore } = req.body;
+        if (!codicePartita || codicePartita == "") {
             return res.json({ result: "errore" });
         }
         const indexPartita = partite.findIndex(partita => {
             return partita.id === codicePartita
         });
         const partita = partite[indexPartita];
-        if(nomeGiocatore == "" || !nomeGiocatore){
+        if (nomeGiocatore == "" || !nomeGiocatore) {
             return res.json({ result: "errore" });
-        }else{
+        } else {
             let trovato = false;
-            partita.partecipanti.forEach(partecipante =>{
-                if(partecipante.nome == nomeGiocatore){
+            partita.partecipanti.forEach(partecipante => {
+                if (partecipante.nome == nomeGiocatore) {
                     trovato = true;
                     return res.json({ result: partecipante.stato });
                 }
             })
-            if(!trovato){
+            if (!trovato) {
                 res.json({ result: "errore" });
             }
         }

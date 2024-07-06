@@ -24,11 +24,7 @@ const getPosizione = async () => {
         })
     });
     rsp = await rsp.json();
-    if (rsp.result.includes("errore")) {
-        console.log("Errore nel recuperare la posizione");
-    } else {
-        posizione.innerText = rsp.result;
-    }
+    posizione.innerText = rsp.result;
 };
 
 const getDenaro = async () => {
@@ -147,7 +143,7 @@ document.getElementById('rollDiceButton').onclick = async function() {
             "content-type": "application/json"
         },
         body: JSON.stringify({
-            nomePartecipante: sessionStorage.getItem("nome"),
+            nomeGiocatore: sessionStorage.getItem("nome"),
             codicePartita: sessionStorage.getItem("codice"),
             dado1,
             dado2
@@ -165,9 +161,6 @@ document.getElementById('rollDiceButton').onclick = async function() {
             })
         });
         rsp = await rsp.json();
-        if(rsp.result == 'Ok'){
-            window.location.reload();
-        }
     }else{
         console.log("Errore nel lancio dei dadi");
     }
@@ -176,3 +169,8 @@ document.getElementById('rollDiceButton').onclick = async function() {
         futura possibilità di acquistare la proprietà o pagare il denaro a chi si deve
     */
 };
+
+socket.on("cambioturno", () =>{
+    console.log("Cambio turno ricevuto");
+    window.location.reload()
+})
