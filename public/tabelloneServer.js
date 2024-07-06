@@ -16,9 +16,9 @@ const getPosizioni = async() =>{
     })
    });
    rsp = await rsp.json();
-   console.log("Recupero posizioni: ");
-   console.log(rsp.result);
-   return rsp.result;
+   rsp.result.forEach(par =>{
+    document.getElementById(par.stato).innerHTML += " <div class='pawn' style='background-color: "+par.pedina+"'></div>";
+   })
 }
 
 const getPartecipanti = async() =>{
