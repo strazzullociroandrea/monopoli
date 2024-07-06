@@ -26,15 +26,96 @@
         .alert {
             height: 30vh;
         }
-        .partecipanti{
+
+        .partecipanti {
             height: 40vh;
         }
+
         .scrollable {
             height: 40vh;
             overflow-y: auto;
             display: flex;
             align-items: center;
             flex-direction: column;
+        }
+
+        .board {
+            width: 100%;
+            height: 100%;
+            border-collapse: collapse;
+        }
+
+        .board td {
+            border: 1px solid black;
+            text-align: center;
+            vertical-align: middle;
+            position: relative;
+        }
+
+        .corner {
+            width: 9%;
+            height: 9%;
+        }
+
+        .property {
+            width: 7%;
+            height: 7%;
+        }
+
+        .middle {
+            width: 7%;
+            height: 7%;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .cell-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .cell-content .title {
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .cell-content .price {
+            font-size: 0.6em;
+            color: green;
+        }
+
+        .cell-content .pawns {
+            display: flex;
+            gap: 2px;
+        }
+
+        .cell-content .pawn {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .pawn-red {
+            background-color: red;
+        }
+
+        .pawn-blue {
+            background-color: blue;
+        }
+
+        .pawn-green {
+            background-color: green;
+        }
+
+        .pawn-yellow {
+            background-color: yellow;
         }
     </style>
     <title>Monopoli - server</title>
@@ -44,7 +125,7 @@
     <div class="container-fluid">
         <div class="row container-custom">
             <div class="col-md-2 text-side">
-                <div class="Card mt-4 bg-secondary ">
+                <div class="Card mt-4 bg-secondary">
                     <div class="m-3">
                         <p class="text-light mb-4">IMPOSTAZIONI</p>
                         <div class="row mt-4">
@@ -61,10 +142,246 @@
                 </div>
             </div>
             <div class="col-md-auto mt-4">
-                <div class="Card bg-white"></div>
+                <div class="Card bg-white">
+                    <table class="board">
+                        <tr>
+                            <td class="corner">
+                                <div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div>
+                            </td>
+                            <td class="property">
+                                <div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div>
+                            </td>
+                            <td class="property">
+                                <div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div>
+                            </td>
+                            <td class="property">
+                                <div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div>
+                            </td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="corner"><div class="cell-content">
+                                <div class="title">Partenza</div>
+                                <div class="price"></div>
+                                <div class="pawns"></div>
+                            </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td colspan="9" rowspan="9" class="middle hidden"></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                        </tr>
+                        <tr>
+                            <td class="corner">
+                                <div class="cell-content">
+                                    <div class="title">Parcheggio</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div>
+                            </td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="property"><div class="cell-content">
+                                    <div class="title">Partenza</div>
+                                    <div class="price"></div>
+                                    <div class="pawns"></div>
+                                </div></td>
+                            <td class="corner"><div class="cell-content">
+                                <div class="title">Vai in prigione</div>
+                                <div class="price"></div>
+                                <div class="pawns"></div>
+                            </div></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <div class="col-md-3 text-side">
-                <div class="Card mt-4 bg-secondary ">
+                <div class="Card mt-4 bg-secondary">
                     <div class="row justify-content-center">
                         <div class="col-md-11">
                             <div class="m-3">
@@ -76,7 +393,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
