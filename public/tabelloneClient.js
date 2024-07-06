@@ -153,7 +153,22 @@ document.getElementById('rollDiceButton').onclick = async function() {
             dado2
         })
     })
+    rsp = await rsp.json();
+    if(rsp.result == "Ok aggiorna denaro !"){
+        let rsp = await fetch("/cambioTurno",{
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                codicePartita: sessionStorage.getItem("codice")
+            })
+        })
+    }else{
+        console.log("Errore nel lancio dei dadi");
+    }
     /*
         gestire middleware per il cambio turno dopo che ha modificato importo denaro e posizione + spostamento
+        futura possibilità di acquistare la proprietà o pagare il denaro a chi si deve
     */
 };

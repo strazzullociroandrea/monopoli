@@ -94,7 +94,33 @@ const middleware = (app, partite, io) =>{
             return res.json({ result: partita.turno });
         }
     })
-
+    app.post("/cambioTurno", (req, res) => {
+        const { codicePartita } = req.body;
+        if (!codicePartita || codicePartita == "") {
+            return res.json({ result: "" });
+        }
+    
+        const indexPartita = partite.findIndex(partita => partita.id === codicePartita);
+        if (indexPartita === -1) {
+            return res.json({ result: "" });
+        } else {
+            const partita = partite[indexPartita];
+            let partecipanteIndex = partita.partecipanti.findIndex(partecipante => partecipante.nome == partita.turno);
+    
+            if (partecipanteIndex == -1) {
+                console.log("Partecipante non trovato");
+            } else {
+                if (partecipanteIndex == partita.partecipanti.length - 1) {
+                    partecipanteIndex = 0;
+                } else {
+                    partecipanteIndex++;
+                }
+                partita.turno = partita.partecipanti[partecipanteIndex].nome;
+                return res.json({ result: "Ok" });
+            }
+        }
+    });
+    
     app.post("/recuperaDenaro", (req, res)=>{
         const {codicePartita, nomeGiocatore} = req.body;
         if(!codicePartita || codicePartita == ""){
