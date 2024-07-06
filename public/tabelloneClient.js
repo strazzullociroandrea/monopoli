@@ -163,7 +163,11 @@ document.getElementById('rollDiceButton').onclick = async function() {
             body: JSON.stringify({
                 codicePartita: sessionStorage.getItem("codice")
             })
-        })
+        });
+        rsp = await rsp.json();
+        if(rsp.result == 'Ok'){
+            window.location.reload();
+        }
     }else{
         console.log("Errore nel lancio dei dadi");
     }

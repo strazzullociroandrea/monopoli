@@ -116,6 +116,7 @@ const middleware = (app, partite, io) =>{
                     partecipanteIndex++;
                 }
                 partita.turno = partita.partecipanti[partecipanteIndex].nome;
+                io.to(partita.socketServer).emit("cambioturno");
                 return res.json({ result: "Ok" });
             }
         }
