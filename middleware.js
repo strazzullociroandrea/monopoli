@@ -205,6 +205,30 @@ const middleware = (app, partite, io) => {
         }
     })
 
+    app.post("/recuperaPosizioni", (req, res)=>{
+        const { codicePartita } = req.body;
+        if (!codicePartita || codicePartita == "") {
+            return res.json({ result: [] });
+        }
+        const indexPartita = partite.findIndex(partita => {
+            return partita.id === codicePartita
+        });
+        const partita = partite[indexPartita];
+        if (indexPartita === -1) {
+            return res.json({ result: [] });
+        } else {
+            const partita = partite[indexPartita];
+            const posizioni = [];
+            partita.partecipanti.forEach(partecipante => {
+                posizioni.push({
+                    stato: partecipante.stato,
+                    nome: partecipante.nome,
+                    pedina: partecipante.pedina
+                })
+            })
+            return res.json({ result: posizioni });
+        }
+    })
     app.post("/escipartita", (req, res) => {
         const { codicePartita, nomeGiocatore } = req.body;
         if (!codicePartita || codicePartita == "") {

@@ -5,6 +5,22 @@ const chiudi = document.getElementById("chiudi");
 const turno = document.getElementById("turno");
 const socket = io();
 
+const getPosizioni = async() =>{
+   let rsp = await fetch("/recuperaPosizioni",{
+    method: "POST",
+    headers: {
+        "content-type": "Application/json"
+    },
+    body: JSON.stringify({
+        codicePartita: sessionStorage.getItem("codice")
+    })
+   });
+   rsp = await rsp.json();
+   console.log("Recupero posizioni: ");
+   console.log(rsp.result);
+   return rsp.result;
+}
+
 const getPartecipanti = async() =>{
     let rsp = await fetch("/partecipanti",{
         method: "POST",
@@ -48,6 +64,7 @@ window.onload = async() =>{
     titolo.value = sessionStorage.getItem("titolo");
     codice.value = sessionStorage.getItem("codice");
     await getTurno();
+    await getPosizioni();
     socket.emit("aggiungiserver", sessionStorage.getItem("codice"));
 }
 
